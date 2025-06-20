@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Start - ESP32 Image Viewer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet" />
+<style>
+  /* Reset and base */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    background-color: #DCE5D2; /* Background color */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    color: #333; /* Darker text for contrast */
+  }
+  .container {
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9); /* Slightly opaque white background */
+    padding: 48px 32px;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+  h1 {
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 24px;
+  }
+  button {
+    font-weight: 600;
+    font-size: 1.6rem;
+    background-color: #435A12; /* Updated button color */
+    color: #ffffff;
+    border: none;
+    border-radius: 0.75rem;
+    padding: 18px 48px;
+    cursor: pointer;
+    transition: background-color 0.4s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 6px 20px rgba(67, 90, 18, 0.6);
+  }
+  button:hover,
+  button:focus {
+    background-color: #33440f;
+    outline: none;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(51, 68, 15, 0.8);
+  }
+  button:active {
+    transform: translateY(0);
+    background-color: #2a3a0d;
+    box-shadow: 0 4px 16px rgba(42, 58, 13, 0.9);
+  }
+  @media (max-width: 480px) {
+    .container {
+      padding: 36px 24px;
+    }
+    button {
+      font-size: 1.3rem;
+      padding: 14px 36px;
+    }
+    h1 {
+      font-size: 2rem;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="container" role="main" aria-label="Start page with button to ESP32 Image Viewer" color="HEX 435A12">
+    <h1>Welcome to ESP32 Image Viewer</h1>
+    <button id="start-btn"  onclick="callAPI()" aria-label="Start Image Viewer">CAPTURE</button>
+  </div>
+
+<script>
+   function callAPI() {
+            fetch("/api/trigger")
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.img_url) {
+                        document.getElementById("image").src = data.img_url + "?t=" + new Date().getTime();
+                    }
+                });
+        }
+ 
+</script>
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>ESP32 Image Viewer</title>
+    <script>
+        function callAPI() {
+            fetch("/api/trigger")
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.img_url) {
+                        document.getElementById("image").src = data.img_url + "?t=" + new Date().getTime();
+                    }
+                });
+        }
+    </script>
+</head>
+<body>
+    <button onclick="callAPI()">Get Image</button>
+    <br><br>
+    <img id="image" src="/static/converted.png" alt="Image will appear here" width="300">
+</body>
+</html> -->

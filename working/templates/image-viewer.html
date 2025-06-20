@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ESP32 Image Viewer</title>
+    <script>
+        function callAPI() {
+            fetch("/api/trigger")
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.img_url) {
+                        document.getElementById("image").src = data.img_url + "?t=" + new Date().getTime();
+                    }
+                });
+        }
+    </script>
+</head>
+<body>
+    <button onclick="callAPI()">Get Image</button>
+    <br><br>
+    <img id="image" src="/static/converted.png" alt="Image will appear here" width="300">
+</body>
+</html>

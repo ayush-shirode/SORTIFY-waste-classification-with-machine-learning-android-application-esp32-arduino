@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ESP32 Image Viewer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      background-color: #DCE5D2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 48px 32px;
+      border-radius: 1rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    h1 {
+      font-weight: 700;
+      font-size: 2.2rem;
+      margin-bottom: 24px;
+    }
+    button {
+      font-weight: 600;
+      font-size: 1.3rem;
+      background-color: #435A12;
+      color: #ffffff;
+      border: none;
+      border-radius: 0.75rem;
+      padding: 14px 36px;
+      cursor: pointer;
+      transition: background-color 0.4s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      box-shadow: 0 6px 20px rgba(67, 90, 18, 0.6);
+      margin: 10px;
+    }
+    button:hover,
+    button:focus {
+      background-color: #33440f;
+      outline: none;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(51, 68, 15, 0.8);
+    }
+    button:active {
+      transform: translateY(0);
+      background-color: #2a3a0d;
+      box-shadow: 0 4px 16px rgba(42, 58, 13, 0.9);
+    }
+    #qr-container {
+      margin-top: 32px;
+    }
+    #qr-code {
+      max-width: 200px;
+      margin-top: 12px;
+      border: 2px solid #ccc;
+      border-radius: 0.5rem;
+      background: #fff;
+      padding: 10px;
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 36px 24px;
+      }
+      button {
+        font-size: 1.1rem;
+        padding: 12px 28px;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" role="main">
+    <h1>ESP32 Image Viewer</h1>
+
+    <!-- Capture Button -->
+    <button id="start-btn" onclick="callAPI()">CAPTURE</button>
+
+    <!-- Refresh QR Code Button -->
+    <button id="refresh-btn" onclick="refreshQRCode()">Refresh QR Code</button>
+
+    <!-- QR Code Display -->
+    <div id="qr-container" aria-live="polite">
+      <h3>Prediction QR Code</h3>
+      <img id="qr-code" src="" alt="QR Code will appear here" />
+    </div>
+  </div>
+
+  <script>
+    function callAPI() {
+      fetch("/api/trigger")
+        .then(res => res.json())
+        .then(data => {
+          alert(data.message);
+          // Auto-refresh QR after capture
+          refreshQRCode();
+        });
+    }
+
+    function refreshQRCode() {
+      document.getElementById("qr-code").src = "/api/prediction_qr?t=" + new Date().getTime();
+    }
+
+    // Optional: Load QR on initial page load
+    window.onload = refreshQRCode;
+  </script>
+</body>
+</html>
